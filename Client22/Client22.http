@@ -1,0 +1,9 @@
+@Client22_HostAddress = http://localhost:5291
+
+Post {{Client22_HostAddress}}/Style/Gay
+Accept: application/json
+
+###
+GET {{Client22_HostAddress}}/Style
+###
+Post {{Client22_HostAddress}}/Style/Straight

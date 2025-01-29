@@ -1,6 +1,10 @@
+using BadgerClan.Client;
 using BadgerClan.Logic;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddLogging();
+builder.Services.AddSingleton<IFightStyle, Gay>();
+builder.Services.AddControllers();
 var app = builder.Build();
 
 string url = app.Configuration["ASPNETCORE_URLS"]?.Split(";").Last() ?? throw new Exception("Unable to find URL");
@@ -46,5 +50,4 @@ app.MapPost("/", (MoveRequest request) =>
     // ***************************************************************************
     return new MoveResponse(myMoves);
 });
-
 app.Run();

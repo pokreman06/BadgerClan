@@ -9,6 +9,14 @@
       {
         "Path": "BadgerClan.Client\\BadgerClan.Client.csproj",
         "Action": "Start"
+      },
+      {
+        "Path": "Client22\\Client22.csproj",
+        "Action": "Start"
+      },
+      {
+        "Path": "BadgerClan.Mobile\\BadgerClan.Mobile.csproj",
+        "Action": "Start"
       }
     ]
   }
