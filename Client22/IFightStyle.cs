@@ -5,36 +5,70 @@ public class Mode
     public IFightStyle style=new Default();
     public List<Move> GetMoves(MoveRequest request)
     {
-        return style.GetCurrentMoves();
+        return style.GetCurrentMoves(request);
     }
 }
 public interface IFightStyle
 {
     public string Name { get; }
-    public List<Move> GetCurrentMoves(); 
+    public List<Move> GetCurrentMoves(MoveRequest request); 
 }
-public class Gay : IFightStyle
+public class Hold : IFightStyle
 {
-    public string Name { get; private set; } = "Gay";
-    public List<Move> GetCurrentMoves()
+    public string Name { get; private set; } = "Hold";
+    public List<Move> GetCurrentMoves(MoveRequest request)
     {
-        throw new NotImplementedException();
+        var results = new List<Move>();
+        var ownUnits = request.Units.Where(p=>p.Team==request.YourTeamId).ToList();
+        var otherUnits = request.Units.Where(p => p.Team != request.YourTeamId).ToList();
+        foreach(UnitDto unit in ownUnits)
+        {
+            double distance=10000000;
+            UnitDto target = null;
+            foreach(UnitDto enemy in otherUnits)
+            {
+                if (enemy.Location.Distance(unit.Location) < distance)
+                {
+                    target = enemy;
+                    distance = enemy.Location.Distance(unit.Location);
+                }
+            }
+            results.Add(new Move(MoveType.Attack, unit.Id, target!.Location));
+        }
+        return results;
     }
 }
-public class Straight : IFightStyle
+public class Attack : IFightStyle
 {
-    public string Name => "Straight";
+    public string Name => "Attack";
 
-    public List<Move> GetCurrentMoves()
+    public List<Move> GetCurrentMoves(MoveRequest request)
     {
-        throw new NotImplementedException();
+        var results = new List<Move>();
+        var ownUnits = request.Units.Where(p => p.Team == request.YourTeamId).ToList();
+        var otherUnits = request.Units.Where(p => p.Team != request.YourTeamId).ToList();
+        foreach (UnitDto unit in ownUnits)
+        {
+            double distance = 10000000;
+            UnitDto target = null;
+            foreach (UnitDto enemy in otherUnits)
+            {
+                if (enemy.Location.Distance(unit.Location) < distance)
+                {
+                    target = enemy;
+                    distance = enemy.Location.Distance(unit.Location);
+                }
+            }
+            results.Add(new Move(MoveType.Walk, unit.Id, target!.Location));
+        }
+        return results;
     }
 }
 public class Default : IFightStyle
 {
     public string Name => "Default";
 
-    public List<Move> GetCurrentMoves()
+    public List<Move> GetCurrentMoves(MoveRequest request)
     {
         throw new NotImplementedException();
     }

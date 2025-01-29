@@ -15,16 +15,16 @@ namespace BadgerClan.Mobile.ModelView
         [ObservableProperty]
         private string style;
         [RelayCommand]
-        public async Task Gay()
+        public async Task Hold()
         {
-            api.Change("Gay");
-            Style = "Gay";
+            api.Change("Hold");
+            Style = "Hold";
         }
         [RelayCommand]
         public async Task Straight()
         {
-            api.Change("Straight");
-            Style = "Straight";
+            api.Change("Attack");
+            Style = "Attack!";
         }
     }
 }

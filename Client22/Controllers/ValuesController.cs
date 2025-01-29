@@ -18,8 +18,8 @@ namespace Client22.Controllers
         {
             mode.style = style.ToLower() switch
             {
-                "gay" => new Gay(),
-                "straight" => new Straight(),
+                "hold" => new Hold(),
+                "attack" => new Attack(),
                 _ => new Default()
             };
             return Results.Ok();

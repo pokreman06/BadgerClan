@@ -8,8 +8,8 @@
             Padding="30,0"
             Spacing="25">
             <Label Text="{Binding Style}"/>
-            <Button Text ="Gay" Command="{Binding GayCommand}"/>
-            <Button Text="Straight" Command="{Binding StraightCommand}"/>
+            <Button Text ="Hold" Command="{Binding GayCommand}"/>
+            <Button Text="Attack" Command="{Binding StraightCommand}"/>
 
         </VerticalStackLayout>
     </ScrollView>
