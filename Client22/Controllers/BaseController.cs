@@ -16,9 +16,9 @@ namespace Client22.Controllers
         private Mode mode;
 
         [HttpPost]
-        public List<Move> Basic(MoveRequest request)
+        public MoveResponse Basic(MoveRequest request)
             {
-            return mode.GetMoves(request);
+            return new MoveResponse(mode.GetMoves(request));
             }
     }
 }

@@ -21,7 +21,7 @@ namespace BadgerClan.Mobile.ModelView
             Style = "Hold";
         }
         [RelayCommand]
-        public async Task Straight()
+        public async Task Attack()
         {
             api.Change("Attack");
             Style = "Attack!";
