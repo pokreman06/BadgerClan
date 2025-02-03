@@ -3,12 +3,12 @@
     "Name": "Client and Server",
     "Projects": [
       {
-        "Path": "Client22\\Client22.csproj",
+        "Path": "BadgerClan.Mobile\\BadgerClan.Mobile.csproj",
         "Action": "Start",
-        "DebugTarget": "http"
+        "DebugTarget": "Windows Machine"
       },
       {
-        "Path": "BadgerClan.Mobile\\BadgerClan.Mobile.csproj",
+        "Path": "Client22\\Client22.csproj",
         "Action": "Start"
       }
     ]
