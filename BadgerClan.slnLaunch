@@ -4,7 +4,8 @@
     "Projects": [
       {
         "Path": "Client22\\Client22.csproj",
-        "Action": "Start"
+        "Action": "Start",
+        "DebugTarget": "http"
       },
       {
         "Path": "BadgerClan.Mobile\\BadgerClan.Mobile.csproj",

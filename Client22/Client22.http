@@ -6,4 +6,4 @@ Accept: application/json
 ###
 GET {{Client22_HostAddress}}/Style
 ###
-Post {{Client22_HostAddress}}/Style/Straight
+Post {{Client22_HostAddress}}/Style/default

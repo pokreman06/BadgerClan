@@ -3,9 +3,9 @@ namespace Client22;
 public class Mode
 {
     public IFightStyle style=new Default();
-    public List<Move> GetMoves(MoveRequest request)
+    public MoveResponse GetMoves(MoveRequest request)
     {
-        return style.GetCurrentMoves(request);
+        return new MoveResponse(style.GetCurrentMoves(request));
     }
 }
 public interface IFightStyle
@@ -59,7 +59,7 @@ public class Attack : IFightStyle
                     distance = enemy.Location.Distance(unit.Location);
                 }
             }
-            results.Add(new Move(MoveType.Walk, unit.Id, target!.Location));
+            results.Add(new Move(MoveType.Walk, unit.Id, unit.Location.Toward(target.Location)));
         }
         return results;
     }
@@ -70,6 +70,13 @@ public class Default : IFightStyle
 
     public List<Move> GetCurrentMoves(MoveRequest request)
     {
-        throw new NotImplementedException();
+        var results = new List<Move>();
+        var ownUnits = request.Units.Where(p => p.Team == request.YourTeamId).ToList();
+        var otherUnits = request.Units.Where(p => p.Team != request.YourTeamId).ToList();
+        foreach (UnitDto unit in ownUnits)
+        {
+            results.Add(new Move(MoveType.Walk, unit.Id, unit.Location.Toward(new Coordinate(1000000000,10000000))));
+        }
+            return results;
     }
 }
