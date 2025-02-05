@@ -1,6 +1,4 @@
-﻿
-
-namespace BadgerClan.Logic;
+﻿namespace BadgerClan.Logic;
 
 public class GameEngine
 {
@@ -32,19 +30,29 @@ public class GameEngine
             {
                 case MoveType.Walk:
                     var movedLocation = new Coordinate(move.Target.Q, move.Target.R);
+
                     var canMove = distance <= unit.Moves;
                     if (!canMove)
                     {
-                        if (distance <= unit.Moves + (1 / 2.0 + 0.01))
+                        if (distance - 0.9 <= unit.Moves)
                         {
                             canMove = true;
                         }
                     }
+                    
                     if (canMove && defender == null &&
                         state.IsOnBoard(movedLocation))
                     {
+                        var startingLocation = unit.Location;
                         unit.Location = movedLocation;
                         unit.Moves -= distance;
+                        state.Logs.Add(new GameLog(
+                            TurnNumber: state.TurnNumber,
+                            Type: LogType.Moved,
+                            UnitId: unit.Id,
+                            SourceCoordinate: startingLocation,
+                            DestinationCoordinate: movedLocation
+                        ));
                     }
                     break;
 
@@ -54,7 +62,7 @@ public class GameEngine
                         continue;
                     }
                     var attackCost = unit.MaxMoves / unit.AttackCount;
-                    if (defender != null && unit.Moves > (attackCost / 2.0))
+                    if (defender != null && unit.Moves > 0.1)
                     {
                         defender.Health -= unit.Attack;
                         unit.Moves -= attackCost;
@@ -90,7 +98,7 @@ public class GameEngine
         state.IncrementTurn();
     }
 
-    private const int MAX_HEALING = 15;
+    private const int MAX_HEALING = 10;
     private const int SQUAD_SIZE = 6;
     public static int CalculateMeds(int unitsLeft, int totalUnits)
     {
