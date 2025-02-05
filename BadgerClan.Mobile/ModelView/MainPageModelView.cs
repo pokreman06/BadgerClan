@@ -11,51 +11,98 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 namespace BadgerClan.Mobile.ModelView
 {
-    public partial class MainPageModelView(IAPIService api) : ObservableObject
+    public partial class MainPageModelView : ObservableObject
     {
-        [ObservableProperty]
-        private string style;
+        IAPIService api;
+        public MainPageModelView(IAPIService api)
+        {
+            ApiManagers = new();
+            this.api = api;
+            ApiManagers.Add(new("default", api));
+        }
         [ObservableProperty]
         string tempName;
         [ObservableProperty]
         string tempPath;
+        async Task Change(string command)
+        {
+            foreach(var api in ApiManagers)
+            {
+                if (api.Selected)
+                {
+                    await api.APIService.Change(command);
+                    await api.Initialize();
+                }
+                
+            }
+        }
+        [RelayCommand]
+        public async Task Default()
+        {
+            await Change("Default");
+        }
         [RelayCommand]
         public async Task Hold()
         {
-            api.Change("Hold");
-            Style = "Hold";
+            await Change("Hold");
         }
         [RelayCommand]
         public async Task Attack()
         {
-            api.Change("Attack");
-            Style = "Attack!";
-        }
-        public async void UpdateStyle()
-        {
-            Style = await api.Get();
+            await Change("Attack");
         }
         [RelayCommand]
-        public void LogAPI()
+        public async Task Basic()
         {
-            ApiManagers.Add(new(api) { Name = TempName, HttpClient = new() { BaseAddress = new Uri(TempPath) } });
-            TempName = "";
-            TempPath = "";
+            await Change("Basic");
+        }
+        [RelayCommand]
+        public async Task LogAPI()
+        {
+            try
+            {
+                var value = new ApiManager(TempName, TempPath);
+                await value.Initialize();
+                ApiManagers.Add(value);
+                TempName = "";
+                TempPath = "";
+
+            }
+            catch { }
         }
 
         public ObservableCollection<ApiManager> ApiManagers { get; set; }
     }
-    public partial class ApiManager(IAPIService service) : ObservableObject
+    public partial class ApiManager : ObservableObject
     {
         [ObservableProperty]
         string name;
-        [RelayCommand]
-        async Task Select()
+        [ObservableProperty]
+        bool selected = true;
+        [ObservableProperty]
+        string style;
+        async partial void OnSelectedChanged(bool oldValue, bool newValue)
         {
-            service.changeClient(HttpClient);
+            Style=await APIService.Get();
         }
 
         public HttpClient HttpClient;
-
+        public IAPIService APIService { get; set; }
+        
+        public ApiManager(string name, IAPIService service)
+        {
+            APIService = service;
+            Name = name;
+        }
+        public ApiManager(string _name, string client)
+        {
+            Name = _name;
+            HttpClient= new HttpClient() { BaseAddress=new Uri(client)};
+            APIService = new APIService(HttpClient);
+        }
+        public async Task Initialize()
+        {
+            Style = await APIService.Get();
+        }
     }
 }

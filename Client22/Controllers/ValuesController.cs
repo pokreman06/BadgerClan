@@ -20,6 +20,7 @@ namespace Client22.Controllers
             {
                 "hold" => new Hold(),
                 "attack" => new Attack(),
+                "basic" => new SuperSimpleExampleBot(),
                 _ => new Default()
             };
             return Results.Ok();

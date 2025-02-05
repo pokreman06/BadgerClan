@@ -18,7 +18,7 @@ namespace BadgerClan.Mobile
         }
         async void initialize(object sender, EventArgs args)
         {
-            modelView.Style = await api.Get();
+            modelView.ApiManagers[0].Style = await api.Get();
         }
     }
 
