@@ -11,9 +11,14 @@ namespace BadgerClan.Mobile.Services
     {
         public Task Change(string name);
         public Task<string> Get();
+        public void changeClient(HttpClient newC);
     }
     public class APIService(HttpClient client): IAPIService
     {
+        public void changeClient(HttpClient newC)
+        {
+            client=newC;
+        }
         public async Task Change(string name) 
         {
             await client.PostAsync("Style/"+name, null);

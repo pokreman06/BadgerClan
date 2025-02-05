@@ -7,7 +7,6 @@ namespace Client22.Controllers
     [Route("")]
     public class BaseController : ControllerBase
     {
-        int requestNum=0;
         public BaseController(ILogger<BaseController> logger, Mode mode)
         {
             _logger = logger;
@@ -19,16 +18,12 @@ namespace Client22.Controllers
         [HttpPost]
         public MoveResponse Basic(MoveRequest request)
         {
-            requestNum++;
-            _logger.LogInformation($"Handling request #{requestNum}");
-            //try
-            //{
             return mode.GetMoves(request);
-            //}
-            //catch
-            //{
-            //    return new(new());
-            //}
+        }
+        [HttpGet]
+        public string ForJohnnyBoy()
+        {
+            return "For Johnathan";
         }
     }
 }

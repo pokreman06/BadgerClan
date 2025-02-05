@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -14,6 +15,10 @@ namespace BadgerClan.Mobile.ModelView
     {
         [ObservableProperty]
         private string style;
+        [ObservableProperty]
+        string tempName;
+        [ObservableProperty]
+        string tempPath;
         [RelayCommand]
         public async Task Hold()
         {
@@ -26,5 +31,31 @@ namespace BadgerClan.Mobile.ModelView
             api.Change("Attack");
             Style = "Attack!";
         }
+        public async void UpdateStyle()
+        {
+            Style = await api.Get();
+        }
+        [RelayCommand]
+        public void LogAPI()
+        {
+            ApiManagers.Add(new(api) { Name = TempName, HttpClient = new() { BaseAddress = new Uri(TempPath) } });
+            TempName = "";
+            TempPath = "";
+        }
+
+        public ObservableCollection<ApiManager> ApiManagers { get; set; }
+    }
+    public partial class ApiManager(IAPIService service) : ObservableObject
+    {
+        [ObservableProperty]
+        string name;
+        [RelayCommand]
+        async Task Select()
+        {
+            service.changeClient(HttpClient);
+        }
+
+        public HttpClient HttpClient;
+
     }
 }

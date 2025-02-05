@@ -55,7 +55,7 @@ app.MapPost("/", (GameState request) =>
     // ***************************************************************************
     // ***************************************************************************
 
-    var myMoves = SuperSimpleExampleBot.MakeMoves(request);//Very simple bot example.  Delete this line when you write your own bot.
+    myMoves = SuperSimpleExampleBot.MakeMoves(request);//Very simple bot example.  Delete this line when you write your own bot.
 
     return new MoveResponse(myMoves);
 });
