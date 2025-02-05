@@ -1,5 +1,6 @@
 ﻿using BadgerClan.Logic;
 using System.Collections.Generic;
+using System.Reflection.Metadata.Ecma335;
 namespace Client22;
 public class Mode
 {
@@ -83,11 +84,9 @@ public class Attack : IFightStyle
                 isRight = !isRight;
 
             }
-            foreach (var unit in ownUnits)
+            foreach (var unit in ownUnitsA)
             {
                 result.Add(unit, baseLocation.Toward(baseLocation.MoveNorthEast(1).MoveNorthWest(1)));
-
-
             }
 
         }
@@ -98,14 +97,17 @@ public class Attack : IFightStyle
     MoveRequest? lastKnown;
     public List<Move> GetCurrentMoves(MoveRequest request)
     {
+        
         lastKnown = request;
         var results = new List<Move>();
 
         var ownUnits = request.Units.Where(p => p.Team == request.YourTeamId).ToList();
-        var otherUnits = request.Units.Where(p => p.Team != request.YourTeamId).OrderBy<UnitDto, int>(p => p.Location.Distance(ownUnits[0].Location)).ToList();
+        if (ownUnits.Count() == 0)
+            return new();
+        var otherUnits = request.Units.Where(p => p.Team != request.YourTeamId).OrderBy<UnitDto, int>(p => p.Location.Distance(ownUnits.FirstOrDefault()?.Location ?? new(0,0))).ToList();
         //finding direction
-        var col = ownUnits[0].Location.Col - otherUnits[0].Location.Col;
-        var row = otherUnits[0].Location.Row - otherUnits[0].Location.Row;
+        var col = (ownUnits.FirstOrDefault()?.Location ?? new(0, 0)).Col - (otherUnits.FirstOrDefault()?.Location ?? new(0, 0)).Col;
+        var row = (ownUnits.FirstOrDefault()?.Location ?? new(0, 0)).Row -    (otherUnits.FirstOrDefault()?.Location ?? new(0, 0)).Row;
         var direction = 0;
         var moves = new Dictionary<UnitDto, int>();
         if (Math.Abs(col) >= Math.Abs(row))
@@ -147,7 +149,7 @@ public class Attack : IFightStyle
                 moves[unit]++;
             }
             //enemy in range
-            var target = inRange[0];
+            var target = inRange.FirstOrDefault();
             while (moves[unit] != unit.MaxMoves && inRange.Count != 0)
             {
                 if (healths[target] <= 0)
@@ -164,29 +166,24 @@ public class Attack : IFightStyle
                 healths[target] -= unit.Attack;
             }
             //move into position
-            while (moves[unit] != unit.MaxMoves && tempLocation[unit] != locations[unit]) ;
+            while (moves[unit] != unit.MaxMoves && tempLocation[unit] != locations[unit]);
             {
                 var occupied = request.Units.Where(p => p.Location == tempLocation[unit].Toward(locations[unit]));
-                if (occupied.Count() == 0 || healths[occupied.First()] == 0)
-                {
+
                     results.Add(new(MoveType.Walk, unit.Id, tempLocation[unit].Toward(locations[unit])));
                     tempLocation[unit] = tempLocation[unit].Toward(locations[unit]);
                     moves[unit]++;
-                }
-                else break;
+
             }
             //advance
             target = otherUnits[0];
             while (moves[unit] != unit.MaxMoves)
             {
                 var occupied = request.Units.Where(p => p.Location == tempLocation[unit].Toward(target.Location));
-                if (occupied.Count() == 0 || healths[occupied.First()] == 0)
-                {
                     results.Add(new(MoveType.Walk, unit.Id, tempLocation[unit].Toward(target.Location)));
                     tempLocation[unit] = tempLocation[unit].Toward(locations[unit]);
                     moves[unit]++;
-                }
-                else break;
+                
             }
 
         }

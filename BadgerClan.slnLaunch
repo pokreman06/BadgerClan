@@ -10,6 +10,10 @@
       {
         "Path": "Client22\\Client22.csproj",
         "Action": "Start"
+      },
+      {
+        "Path": "BadgerClan.Web\\BadgerClan.Web.csproj",
+        "Action": "Start"
       }
     ]
   }

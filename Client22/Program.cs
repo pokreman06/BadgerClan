@@ -15,7 +15,7 @@ if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
 }
-
+Console.WriteLine(app.Configuration["ASPNETCORE_URLS"]?.Split(";").Last());
 
 app.UseAuthorization();
 
