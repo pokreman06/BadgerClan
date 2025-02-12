@@ -1,7 +1,7 @@
 # Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
 # More GitHub Actions for Azure: https://github.com/Azure/actions
 
-name: Build and deploy ASP.Net Core app to Azure Web App - BadgerWebAPI3
+name: Build and deploy ASP.Net Core app to Azure Web App - BadgerWebgrpc
 
 on:
   push:
@@ -24,10 +24,10 @@ jobs:
           dotnet-version: '9.x'
 
       - name: Build with dotnet
-        run: dotnet build --configuration Release
+        run: cd grpc && dotnet build --configuration Release
 
       - name: dotnet publish
-        run: dotnet publish -c Release -o "${{env.DOTNET_ROOT}}/myapp"
+        run: cd grpc && dotnet publish -c Release -o "${{env.DOTNET_ROOT}}/myapp"
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
@@ -54,15 +54,15 @@ jobs:
       - name: Login to Azure
         uses: azure/login@v2
         with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_ADEE6EDB47024FB7BC75851F296435DD }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_76D23CEC8E22488E8B888686E7A89856 }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_A99618125E9A44DA86B402FF0B14FDA4 }}
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_1230DF5C53B54E8D8CBC057DE68749B7 }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_217FD2BE0F3B4138885FC4C43C57006B }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_AC692E9C59534C398A43B2D6F89FE552 }}
 
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
         with:
-          app-name: 'BadgerWebAPI3'
+          app-name: 'BadgerWebgrpc'
           slot-name: 'Production'
           package: .
           
