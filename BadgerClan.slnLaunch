@@ -16,5 +16,23 @@
         "Action": "Start"
       }
     ]
+  },
+  {
+    "Name": "Client and gServer",
+    "Projects": [
+      {
+        "Path": "BadgerClan.Mobile\\BadgerClan.Mobile.csproj",
+        "Action": "Start",
+        "DebugTarget": "Windows Machine"
+      },
+      {
+        "Path": "grpc\\grpc.csproj",
+        "Action": "Start"
+      },
+      {
+        "Path": "Client22\\Client22.csproj",
+        "Action": "Start"
+      }
+    ]
   }
 ]

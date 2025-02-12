@@ -11,12 +11,14 @@
             <Button Text="Attack" Command="{Binding AttackCommand}"/>
             <Button Text="Default" Command="{Binding DefaultCommand}"/>
             <Button Text="Basic" Command="{Binding BasicCommand}"/>
-
+             
             <Label Text="Name"/>
             <Entry Text="{Binding TempName}"/>
             <Label Text="Path"/>
             <Entry Text="{Binding TempPath}"/>
             <Button Text="Add New API" Command="{Binding LogAPICommand}"/>
+            <Label Text="gRPC?"/>
+            <CheckBox IsChecked="{Binding YeRPC}"/>
             <CollectionView ItemsSource="{Binding ApiManagers}">
                 <CollectionView.ItemTemplate>
                     <DataTemplate>

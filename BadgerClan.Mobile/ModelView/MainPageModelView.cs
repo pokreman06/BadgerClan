@@ -59,18 +59,19 @@ namespace BadgerClan.Mobile.ModelView
         [RelayCommand]
         public async Task LogAPI()
         {
-            try
-            {
-                var value = new ApiManager(TempName, TempPath);
+            //try
+            //{
+                var value = new ApiManager(TempName, TempPath, YeRPC);
                 await value.Initialize();
                 ApiManagers.Add(value);
                 TempName = "";
                 TempPath = "";
-
-            }
-            catch { }
+                YeRPC = false;
+            //}
+            //catch() { }
         }
-
+        [ObservableProperty]
+        private bool yeRPC = false;
         public ObservableCollection<ApiManager> ApiManagers { get; set; }
     }
     public partial class ApiManager : ObservableObject
@@ -94,11 +95,14 @@ namespace BadgerClan.Mobile.ModelView
             APIService = service;
             Name = name;
         }
-        public ApiManager(string _name, string client)
+        public ApiManager(string _name, string client, bool g = false)
         {
             Name = _name;
             HttpClient= new HttpClient() { BaseAddress=new Uri(client)};
-            APIService = new APIService(HttpClient);
+            if (g)
+                APIService = new APIServiceG(client);
+            else
+                APIService = new APIService(HttpClient);
         }
         public async Task Initialize()
         {
