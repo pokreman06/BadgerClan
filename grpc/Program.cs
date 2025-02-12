@@ -1,9 +1,17 @@
 
 using grpc;
 using gRPC.shared;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
 using ProtoBuf.Grpc.Server;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.WebHost.ConfigureKestrel(options =>
+{
+    options.ListenAnyIP(8080);
+    options.ListenAnyIP(8585, listenoptions => listenoptions.Protocols = HttpProtocols.Http2);
+}
+    );
+
 builder.Services.AddSingleton<Mode>();
 builder.Services.AddCodeFirstGrpc();
 builder.Services.AddControllers();

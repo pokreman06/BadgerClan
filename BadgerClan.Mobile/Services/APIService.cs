@@ -45,7 +45,7 @@ namespace BadgerClan.Mobile.Services
             using (var channel = GrpcChannel.ForAddress(address))
             {
                 var client = channel.CreateGrpcService<IStyle>();
-                var result = await client.GetStyleAsync();
+            var result = await client.GetStyleAsync();
                 return result.Style;
             }
         }
